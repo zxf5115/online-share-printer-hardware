@@ -306,8 +306,8 @@ return [
         'upload_tmp_dir'     => @is_writable('/dev/shm/') ? '/dev/shm' : '/tmp',
         'http_compression'   => false,
 
-        // 表示每60秒遍历一次，一个连接如果3600秒内未向服务器发送任何数据，此连接将被强制关闭
-        'heartbeat_idle_time'      => 3600,
-        'heartbeat_check_interval' => 60,
+        // 表示每60秒遍历一次，一个连接如果600秒内未向服务器发送任何数据，此连接将被强制关闭
+        'heartbeat_idle_time'      => 600,
+        'heartbeat_check_interval' => 10,
     ],
 ];
