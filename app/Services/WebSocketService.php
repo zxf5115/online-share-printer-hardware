@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Log;
 use Hhxsv5\LaravelS\Swoole\WebSocketHandlerInterface;
 
 /**
- * 长连接
+ *
  */
-class WebSocketService extends WebSocketHandlerInterface
+class WebSocketService implements WebSocketHandlerInterface
 {
   public function __construct()
   {
