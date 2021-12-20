@@ -19,6 +19,7 @@
         "geoip2/geoip2": "~2.0",
         "goodgay/huaweiobs": "^0.9.5",
         "guzzlehttp/guzzle": "6.3.0",
+        "hhxsv5/laravel-s": "^3.7",
         "iidestiny/laravel-filesystem-oss": "^2.1",
         "intervention/image": "^2.5",
         "jenssegers/agent": "^2.6",
