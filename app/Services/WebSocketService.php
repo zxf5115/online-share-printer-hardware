@@ -1,5 +1,5 @@
 <?php
-namespace App\Service;
+namespace App\Services;
 
 use Swoole\Http\Request;
 use Swoole\WebSocket\Frame;
