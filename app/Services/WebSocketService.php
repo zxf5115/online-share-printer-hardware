@@ -42,8 +42,15 @@ class WebSocketService implements WebSocketHandlerInterface
   // 收到消息时触发
   public function onMessage(Server $server, Frame $frame)
   {
-    // 调用 push 方法向客户端推送数据
-    $server->push($frame->fd, 'This is a message sent from WebSocket Server at ' . date('Y-m-d H:i:s'));
+    if('ping' == $frame->data)
+    {
+        $server->push($frame->fd, '11111111');
+    }
+    else
+    {
+      // 调用 push 方法向客户端推送数据
+      $server->push($frame->fd, '111 This is a message sent from WebSocket Server at ' . date('Y-m-d H:i:s'));
+    }
   }
 
 
