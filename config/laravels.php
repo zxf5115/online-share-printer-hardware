@@ -165,7 +165,7 @@ return [
     'sockets' => [
         [
             'host'     => '127.0.0.1',
-            'port'     => 5200,
+            'port'     => 5291,
             'type'     => SWOOLE_SOCK_TCP,
             'settings' => [
                 'open_eof_check' => true,
