@@ -147,8 +147,8 @@ return [
     */
 
     'websocket' => [
-        'enable' => true,
-        'handler' => \App\Services\WebSocketService::class,
+        'enable' => false,
+        'handler' => '',
     ],
 
     /*
@@ -162,7 +162,16 @@ return [
     |
     */
 
-    'sockets' => [],
+    'sockets' => [
+        'host'     => '127.0.0.1',
+        'port'     => 5200,
+        'type'     => SWOOLE_SOCK_TCP,
+        'settings' => [
+            'open_eof_check' => true,
+            'package_eof'    => "\r\n",
+        ],
+        'handler'  => \App\Sockets\TcpSocket::class,
+    ],
 
     /*
     |--------------------------------------------------------------------------
