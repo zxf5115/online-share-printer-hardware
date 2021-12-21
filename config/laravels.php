@@ -171,7 +171,7 @@ return [
                 'open_eof_check' => true,
                 'package_eof'    => "\r\n",
             ],
-            'handler'  => \App\Sockets\TcpSocket::class,
+            'handler'  => \App\Sockets\Socket::class,
         ]
     ],
 
