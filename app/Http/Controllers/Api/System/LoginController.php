@@ -74,7 +74,7 @@ class LoginController extends BaseController
         {
           return self::error(Code::PRINTER_EMPTY);
         }
-
+\Log::error(time());
         $response = [
           'fid' => $response->id,
           'sign' => 'unkown'
