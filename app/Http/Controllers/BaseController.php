@@ -608,7 +608,8 @@ class BaseController extends Controller
 
     $headers = ['content-type' => 'application/json'];
 
-    $response = \Response::json(['status' => $code, 'message' => $message ?: Code::message($code), 'data' => $data]);
+    $response = \Response::json($data);
+
     return $response->withHeaders($headers);
   }
 
@@ -630,6 +631,7 @@ class BaseController extends Controller
     $headers = ['content-type' => 'application/json'];
 
     $response = \Response::json(['status' => $code, 'message' => Code::message($code)]);
+
     return $response->withHeaders($headers);
   }
 

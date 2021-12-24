@@ -32,10 +32,10 @@ class LoginController extends BaseController
    * @apiParamExample {json} Param-Example:
    * {
    *   "id": 1,
-   *   "sign": 'sfdsfsfqwecvsefsdff@asdfsdfd2f',
-   *   "version": '0.01',
-   *   "printerSn": 'TXS123456',
-   *   "deviceNameAndModel": 'QX616',
+   *   "sign": "sfdsfsfqwecvsefsdff@asdfsdfd2f",
+   *   "version": "0.01",
+   *   "printerSn": "M88XB7BN",
+   *   "deviceNameAndModel": "QX616"
    * }
    *
    * @apiSuccess (字段说明) {String} fid 设备编号
