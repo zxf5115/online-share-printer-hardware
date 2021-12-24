@@ -17,7 +17,7 @@ use App\Http\Controllers\Api\BaseController;
 class LoginController extends BaseController
 {
   // 模型名称
-  protected $_model = 'App\Models\Api\Module\Printer';
+  protected $_model = 'App\Models\Common\Module\Printer';
 
   /**
    * @api {post} /api/certification 01. 打印机认证
