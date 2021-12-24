@@ -130,8 +130,8 @@ class Code
   // 代理商已存在
   const AGENT_EXITS = 10012;
 
-
-
+  // 打印机不存在
+  const PRINTER_EMPTY = 10013;
 
 
 
@@ -232,6 +232,8 @@ class Code
     self::PARENT_AGENT_USERNAME_NO_EMPTY => '上级代理商电话不能为空',
     self::PARENT_AGENT_NO_EXITS => '上级代理商不存在',
     self::AGENT_EXITS => '代理商已存在',
+
+    self::PRINTER_EMPTY => '打印机不存在',
 
   ];
 

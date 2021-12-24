@@ -14,70 +14,12 @@ $api->version('v1', [
   ], function ($api)
   {
     $api->group(['namespace' => 'System'], function ($api) {
-      $api->post('weixin_login', 'LoginController@weixin_login'); // 微信登录
-      $api->post('register', 'LoginController@register');
-      $api->post('bind_mobile', 'LoginController@bind_mobile');
-      $api->get('logout', 'LoginController@logout'); // 退出
-
-      // 系统基础数据路由
-      $api->group(['prefix' => 'system'], function ($api) {
-        $api->get('kernel', 'SystemController@kernel'); // 系统信息路由
-      });
-
-      // 上传路由
-      $api->group(['prefix' => 'file', 'middleware' => ['auth:api', 'refresh.token.api', 'failure']], function ($api) {
-        // 上传文件
-        $api->post('file', 'FileController@file');
-        // 上传图片
-        $api->post('picture', 'FileController@picture');
-      });
+      $api->post('certification', 'LoginController@certification'); // 认证
     });
-
 
 
     $api->group(['namespace' => 'Module'], function ($api) {
 
-      // 公共路由
-      $api->group(['namespace' => 'Common', 'prefix' => 'common'], function ($api) {
-
-        // 省市县路由
-        $api->group(['prefix' => 'area'], function ($api) {
-          $api->get('list', 'AreaController@list');
-        });
-
-        // 联系方式路由
-        $api->group(['prefix' => 'service'], function ($api) {
-          $api->get('data', 'ServiceController@data');
-        });
-
-        // 系统协议路由
-        $api->group(['prefix' => 'agreement'], function ($api) {
-          $api->get('about', 'AgreementController@about');
-          $api->get('user', 'AgreementController@user');
-          $api->get('employ', 'AgreementController@employ');
-          $api->get('privacy', 'AgreementController@privacy');
-          $api->get('specification', 'AgreementController@specification');
-          $api->get('liability', 'AgreementController@liability');
-        });
-
-        // 支付回调路由
-        $api->group(['prefix' => 'notify'], function ($api) {
-          $api->any('wechat', 'NotifyController@wechat');
-        });
-      });
-
-
-
-      // 广告路由
-      $api->group(['prefix' => 'advertising'], function ($api) {
-        $api->get('select', 'AdvertisingController@select');
-
-        $api->group(['namespace' => 'Advertising', 'prefix' => 'position'], function ($api) {
-          $api->get('list', 'PositionController@list');
-          $api->get('select', 'PositionController@select');
-          $api->get('view/{id}', 'PositionController@view');
-        });
-      });
 
 
       // 常见问题路由
