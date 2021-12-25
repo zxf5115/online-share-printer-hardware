@@ -50,7 +50,14 @@ class Socket extends TcpSocket
   {
     \Log::info('Received data', [$fd, $data]);
 
-    $server->send($fd, 'LaravelS: ' . $data);
+    $result = explode("0xff0x**", $data);
+
+    foreach($result as $item)
+    {
+      $server->send($fd, $item);
+    }
+
+
 
     if ($data === "quit0xff0x**")
     {
