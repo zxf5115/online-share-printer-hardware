@@ -48,10 +48,8 @@ class Socket extends TcpSocket
    */
   public function onReceive(Server $server, $fd, $reactorId, $data)
   {
-    \Log::info('Received data', [$fd, $data]);
-
     $result = explode("0xff0x**", $data);
-
+$server->send($fd, $reactorId);
     foreach($result as $item)
     {
       $server->send($fd, $item);
@@ -66,6 +64,28 @@ class Socket extends TcpSocket
     }
   }
 
+
+  public function onTask(Server $server, $task_id, $from_id, $data)
+  {
+
+  }
+
+
+
+  /**
+   * @author zhangxiaofei [<1326336909@qq.com>]
+   * @dateTime 2021-12-25
+   * ------------------------------------------
+   * 关闭
+   * ------------------------------------------
+   *
+   * 服务关闭
+   *
+   * @param Server $server [description]
+   * @param [type] $fd [description]
+   * @param [type] $reactorId [description]
+   * @return [type]
+   */
   public function onClose(Server $server, $fd, $reactorId)
   {
     \Log::info('Close TCP connection', [$fd]);
