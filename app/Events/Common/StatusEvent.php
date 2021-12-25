@@ -1,5 +1,5 @@
 <?php
-namespace App\Events\Platform\Inventory\Inbound;
+namespace App\Events\Common;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
@@ -10,22 +10,22 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 /**
- * 完成入库事件
+ * 打印机状态事件
  */
-class FinishEvent
+class StatusEvent
 {
   use Dispatchable, InteractsWithSockets, SerializesModels;
 
-  public $inbound_id = null;
+  public $data = null;
 
   /**
    * Create a new event instance.
    *
    * @return void
    */
-  public function __construct($inbound_id)
+  public function __construct($data)
   {
-    $this->inbound_id = $inbound_id;
+    $this->data = $data;
   }
 
   /**

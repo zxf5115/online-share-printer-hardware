@@ -4,6 +4,8 @@ namespace App\Sockets;
 use Swoole\Server;
 use Hhxsv5\LaravelS\Swoole\Socket\TcpSocket;
 
+use App\Events\Common\StatusEvent;
+
 /**
  * WebSocket
  */
@@ -18,16 +20,16 @@ class Socket extends TcpSocket
    *
    * 客户端连接
    *
-   * @param Server $server [description]
-   * @param [type] $fd [description]
-   * @param [type] $reactorId [description]
+   * @param Server $server 服务器对象
+   * @param [type] $client_id 客户端编号
+   * @param [type] $data 客户端数据
    * @return [type]
    */
-  public function onConnect(Server $server, $fd, $reactorId)
+  public function onConnect(Server $server, $client_id, $from_id)
   {
-    \Log::info('New TCP connection', [$fd]);
+    \Log::info('New TCP connection', [$client_id]);
 
-    $server->send($fd, 'Welcome to Socket.');
+    $server->send($client_id, 'Welcome to Socket.');
   }
 
 
@@ -40,35 +42,61 @@ class Socket extends TcpSocket
    *
    * 接收客户端消息
    *
-   * @param Server $server [description]
-   * @param [type] $fd [description]
-   * @param [type] $reactorId [description]
-   * @param [type] $data [description]
+   * @param Server $server 服务器对象
+   * @param [type] $client_id 客户端编号
+   * @param [type] $from_id 来源线程
+   * @param [type] $data 客户端数据
    * @return [type]
    */
-  public function onReceive(Server $server, $fd, $reactorId, $data)
+  public function onReceive(Server $server, $client_id, $from_id, $data)
   {
-    $result = explode("0xff0x**", $data);
-$server->send($fd, $reactorId);
-    foreach($result as $item)
+    $result = json_decode($data);
+
+    if(empty($result['type']))
     {
-      $server->send($fd, $item);
+      $server->send($client_id, 'Socket: bye' . PHP_EOL);
+
+      $server->close($client_id);
+    }
+
+    // 心跳包
+    if(106 == $result['type'])
+    {
+      $printer_id = $result['terminalHeartbeat']['terminalId'];
+      $client_time = $result['terminalHeartbeat']['terminalTime'];
+
+      $timestamp = bcsub(time(), $client_time);
+
+      $message = 'heart beat delay:' . $timestamp;
+
+      $server->send($client_id, $message);
+    }
+
+    // 上报打印机状态
+    if(103 == $result['type'])
+    {
+      event(new StatusEvent($result['printerMonitoring']));
     }
 
 
+    // $result = explode("0xff0x**", $data);
 
-    if ($data === "quit0xff0x**")
-    {
-      $server->send($fd, 'LaravelS: bye' . PHP_EOL);
-      $server->close($fd);
-    }
+    // foreach($result as $item)
+    // {
+    //   $server->send($client_id, $item);
+    // }
+
+
+
+    // if ($data === "quit0xff0x**")
+    // {
+    //   $server->send($client_id, 'LaravelS: bye' . PHP_EOL);
+    //   $server->close($client_id);
+    // }
   }
 
 
-  public function onTask(Server $server, $task_id, $from_id, $data)
-  {
 
-  }
 
 
 
@@ -81,14 +109,15 @@ $server->send($fd, $reactorId);
    *
    * 服务关闭
    *
-   * @param Server $server [description]
-   * @param [type] $fd [description]
-   * @param [type] $reactorId [description]
+   * @param Server $server 服务器对象
+   * @param [type] $client_id 客户端编号
+   * @param [type] $data 客户端数据
    * @return [type]
    */
-  public function onClose(Server $server, $fd, $reactorId)
+  public function onClose(Server $server, $client_id, $from_id)
   {
-    \Log::info('Close TCP connection', [$fd]);
-    $server->send($fd, 'Goodbye');
+    \Log::info('Close TCP connection', [$client_id]);
+
+    $server->send($client_id, 'Goodbye');
   }
 }
