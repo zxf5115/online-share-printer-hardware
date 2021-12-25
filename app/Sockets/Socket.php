@@ -51,9 +51,9 @@ class Socket extends TcpSocket
   public function onReceive(Server $server, $client_id, $from_id, $data)
   {
     $data = rtrim($data, "0xff0x**");
-
+\Log::error($data);
     $result = json_decode($data, true);
-
+\Log::error($result);
     if(empty($result['type']))
     {
       $server->send($client_id, 'Socket: bye' . PHP_EOL);
