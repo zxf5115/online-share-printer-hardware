@@ -164,7 +164,7 @@ return [
 
     'sockets' => [
         [
-            'host'     => '127.0.0.1',
+            'host'     => '172.18.119.168',
             'port'     => 5291,
             'type'     => SWOOLE_SOCK_TCP,
             'settings' => [
