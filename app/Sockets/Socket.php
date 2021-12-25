@@ -52,7 +52,7 @@ class Socket extends TcpSocket
   {
     $data = rtrim($data, "0xff0x**");
 
-    $result = json_decode($data);
+    $result = json_decode($data, true);
 
     if(empty($result['type']))
     {
