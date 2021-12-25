@@ -50,6 +50,8 @@ class Socket extends TcpSocket
    */
   public function onReceive(Server $server, $client_id, $from_id, $data)
   {
+    \Log::error($data);
+
     $result = json_decode($data);
 \Log::error($result);
     if(empty($result['type']))
