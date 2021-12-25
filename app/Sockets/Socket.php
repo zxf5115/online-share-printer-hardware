@@ -51,7 +51,7 @@ class Socket extends TcpSocket
   public function onReceive(Server $server, $client_id, $from_id, $data)
   {
     $result = json_decode($data);
-
+\Log::error($result);
     if(empty($result['type']))
     {
       $server->send($client_id, 'Socket: bye' . PHP_EOL);
@@ -64,12 +64,14 @@ class Socket extends TcpSocket
     {
       $printer_id = $result['terminalHeartbeat']['terminalId'];
       $client_time = $result['terminalHeartbeat']['terminalTime'];
-
+\Log::error($printer_id);
       $timestamp = bcsub(time(), $client_time);
 
       $message = 'heart beat delay:' . $timestamp;
 
       $server->send($client_id, $message);
+
+      \Log::error($message);
     }
 
     // 上报打印机状态
