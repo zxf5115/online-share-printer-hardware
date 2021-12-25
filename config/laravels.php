@@ -169,7 +169,7 @@ return [
             'type'     => SWOOLE_SOCK_TCP,
             'settings' => [
                 'open_eof_check' => true,
-                'package_eof'    => "0xff 0xfe 0x** 0x**",
+                'package_eof'    => "0xff0x**",
             ],
             'handler'  => \App\Sockets\Socket::class,
         ]
