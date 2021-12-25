@@ -66,11 +66,12 @@ class Socket extends TcpSocket
     {
       $printer_id = $result['terminalHeartbeat']['terminalId'];
       $client_time = $result['terminalHeartbeat']['terminalTime'];
-
+\Log::error($printer_id);
+\Log::error($client_time);
       $timestamp = bcsub(time(), $client_time);
 
       $message = 'heart beat delay:' . $timestamp;
-
+\Log::error($message);
       $server->send($client_id, $message);
     }
 
