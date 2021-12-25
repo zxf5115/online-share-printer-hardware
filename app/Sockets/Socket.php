@@ -70,7 +70,7 @@ class Socket extends TcpSocket
 \Log::error($client_time);
       $timestamp = bcsub(time(), $client_time);
 
-      $message = 'heart beat delay:' . $timestamp . '\r';
+      $message = 'heart beat delay:' . $timestamp . PHP_EOL;
 \Log::error($message);
       $server->send($client_id, $message);
     }
