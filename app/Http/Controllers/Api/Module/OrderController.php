@@ -19,7 +19,7 @@ use App\Http\Controllers\Api\BaseController;
 class OrderController extends BaseController
 {
   /**
-   * @api {get} /api/member/order/task 01. 处理打印任务
+   * @api {get} /api/order/task 01. 处理打印任务
    * @apiDescription 处理指定订单的打印任务
    * @apiGroup 23. 订单模块
    *
@@ -27,7 +27,7 @@ class OrderController extends BaseController
    * @apiParam {String} start 开始打印页码
    * @apiParam {String} end 结束打印页码
    *
-   * @apiSampleRequest /api/member/order/task
+   * @apiSampleRequest /api/order/task
    * @apiVersion 1.0.0
    */
   public function task(Request $request)
@@ -56,15 +56,7 @@ class OrderController extends BaseController
       {
         $model = Resource::getRow(['order_id' => $request->id]);
 
-        $model->organization_id = self::getOrganizationId();
-        $model->first_level_agent_id = $request->first_level_agent_id;
-        $model->second_level_agent_id = $request->second_level_agent_id;
-        $model->manager_id = $request->manager_id;
-        $model->member_id = self::getCurrentId();
-        $model->printer_id = $request->printer_id;
-        $model->title = $request->filename;
-        $model->page_total = $request->page_total;
-        $model->save();
+        $response = $model->url;
 
         return self::success($response);
       }
@@ -80,41 +72,37 @@ class OrderController extends BaseController
 
 
   /**
-   * @api {post} /api/member/order/result 02. 报告打印结果
-   * @apiDescription 报告当前会员打印文件结果
-   * @apiGroup 23. 会员订单模块
-   * @apiPermission jwt
-   * @apiHeader {String} Authorization 身份令牌
-   * @apiHeaderExample {json} Header-Example:
-   * {
-   *   "Authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiO"
-   * }
+   * @api {post} /api/order/result 02. 报告打印结果
+   * @apiDescription 报告当前打印文件结果
+   * @apiGroup 23. 订单模块
    *
    * @apiParam {String} order_id 订单自增编号
    * @apiParam {String} code 打印状态
    * @apiParam {String} reason 失败描述
-   * @apiParam {String} url 打印文件地址
+   * @apiParam {String} items 打印项目
    *
    * @apiParamExample {json} Param-Example:
    * {
-   *   "id": 1,
-   *   "sign": "sfdsfsfqwecvsefsdff@asdfsdfd2f",
-   *   "version": "0.01",
-   *   "printerSn": "M88XB7BN",
-   *   "deviceNameAndModel": "QX616"
+   *   "orderId": 1, // 上面下发打印任务时给的
+   *   "code": 5, // 状态：0正常 非0异常
+   *   "reason": "缺纸", // 失败原因
+   *   "items": [{
+   *     "id": "1",
+   *     "printPages": 3 // 该文件打印了多少张
+   *   }],
    * }
    *
-   * @apiSampleRequest /api/member/order/result
+   * @apiSampleRequest /api/order/result
    * @apiVersion 1.0.0
    */
   public function result(Request $request)
   {
     $messages = [
-      'order_id.required' => '请您输入订单自增编号',
+      'orderId.required' => '请您输入订单自增编号',
       'code.required' => '请您输入打印状态',
 
     $rule = [
-      'order_id' => 'required',
+      'orderId' => 'required',
       'code' => 'required',
     ];
 
@@ -129,16 +117,19 @@ class OrderController extends BaseController
     {
       try
       {
-        $model = Order::getRow(['id' => $request->order_id]);
+        $model = Order::getRow(['id' => $request->orderId]);
 
-        $model->organization_id = self::getOrganizationId();
-        $model->first_level_agent_id = $request->first_level_agent_id;
-        $model->second_level_agent_id = $request->second_level_agent_id;
-        $model->manager_id = $request->manager_id;
-        $model->member_id = self::getCurrentId();
-        $model->printer_id = $request->printer_id;
-        $model->title = $request->filename;
-        $model->page_total = $request->page_total;
+        if(0 == $request->code)
+        {
+          $model->order_status = 2;
+        }
+        else
+        {
+          $model->order_status = 3;
+        }
+
+        $model->error_status = $request->code;
+        $model->remark       = $request->reason;
         $model->save();
 
         return self::success($model);
