@@ -50,11 +50,6 @@ class Socket extends TcpSocket
    */
   public function onReceive(Server $server, $client_id, $from_id, $data)
   {
-    $message = $data . PHP_EOL;
-
-    $server->send($client_id, $message);
-
-
     $data = rtrim($data, "0xff0x**");
 \Log::error($data);
     $result = json_decode($data, true);
@@ -71,12 +66,11 @@ class Socket extends TcpSocket
     {
       $printer_id = $result['terminalHeartbeat']['terminalId'];
       $client_time = $result['terminalHeartbeat']['terminalTime'];
-\Log::error($printer_id);
-\Log::error($client_time);
+
       $timestamp = bcsub(time(), $client_time);
 
       $message = 'heart beat delay:' . $timestamp . PHP_EOL;
-\Log::error($message);
+
       $server->send($client_id, $message);
     }
 

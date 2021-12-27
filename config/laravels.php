@@ -168,8 +168,11 @@ return [
             'port'     => 5291,
             'type'     => SWOOLE_SOCK_TCP,
             'settings' => [
-                'open_eof_check' => true,
-                'package_eof'    => "0xff0x**",
+                'open_length_check' => true,
+                'package_max_length' => 81920,
+                'package_length_type' => 'n', //see php pack()
+                'package_length_offset' => 0,
+                'package_body_offset' => 4,
             ],
             'handler'  => \App\Sockets\Socket::class,
         ]
