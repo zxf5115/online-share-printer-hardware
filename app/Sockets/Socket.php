@@ -4,6 +4,7 @@ namespace App\Sockets;
 use Swoole\Server;
 use Hhxsv5\LaravelS\Swoole\Socket\TcpSocket;
 
+use App\TraitClass\ToolTrait;
 use App\Events\Common\StatusEvent;
 
 /**
@@ -50,8 +51,10 @@ class Socket extends TcpSocket
    */
   public function onReceive(Server $server, $client_id, $from_id, $data)
   {
-    $data = rtrim($data, "0xff0x**");
+    $data = ToolTrait::byte2string($data);
 \Log::error($data);
+
+exit;
     $result = json_decode($data, true);
 \Log::error($result);
     if(empty($result['type']))
