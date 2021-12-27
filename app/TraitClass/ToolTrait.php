@@ -58,10 +58,16 @@ trait ToolTrait
       $result .= chr(hexdec($ch));
     }
 
-    // 删除控制字符，ps: 换行、缩进、空格
-    $result = preg_replace('/[[:cntrl:]]/', '', $result);
+    if(0 === json_last_error())
+    {
+      if(!is_null(json_decode($str)))
+      {
+        // 删除控制字符，ps: 换行、缩进、空格
+        $result = preg_replace('/[[:cntrl:]]/', '', $result);
 
-    $result = json_decode($result, true)
+        $result = json_decode($result, true);
+      }
+    }
 
     return $result;
   }
