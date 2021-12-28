@@ -54,7 +54,9 @@ class Socket extends TcpSocket
 
     $result = ToolTrait::parseData($data);
 
-    Log::info('解析后数据: ' . $result);
+    Log::info('解析后数据: start');
+    Log::info($result);
+    Log::info('解析后数据: end');
 
     // 如果数据不存在 type, 为无效数据
     if(empty($result['type']))
