@@ -50,13 +50,13 @@ class Socket extends TcpSocket
    */
   public function onReceive(Server $server, $client_id, $from_id, $data)
   {
-    // Log::info('下游原始数据: ' . $data);
+    // Log::info('original data: ' . $data);
 
     $result = ToolTrait::parseData($data);
 
-    Log::info('解析后数据: start');
+    Log::info('parsed data: start');
     Log::info($result);
-    Log::info('解析后数据: end');
+    Log::info('parsed data: end');
 
     // 如果数据不存在 type, 为无效数据
     if(empty($result['type']))
@@ -81,6 +81,8 @@ class Socket extends TcpSocket
 
       // 将字符串转换字节流字符串
       $message = ToolTrait::stringToByte($message);
+
+      // Log::info('heart beat data: ' . $message);
 
       $server->send($client_id, $message);
     }
