@@ -54,12 +54,12 @@ class Socket extends TcpSocket
 
     $result = ToolTrait::parseData($data);
 
+    Log::info('解析后数据: ' . $result);
+
     // 如果数据不存在 type, 为无效数据
     if(empty($result['type']))
     {
       Log::warning('Invalid TCP connection', [$client_id]);
-
-      $server->close($client_id);
     }
 
     // 心跳包
