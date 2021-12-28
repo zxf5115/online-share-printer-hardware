@@ -2,6 +2,7 @@
 namespace App\Sockets;
 
 use Swoole\Server;
+use Illuminate\Support\Facades\Log;
 use Hhxsv5\LaravelS\Swoole\Socket\TcpSocket;
 
 use App\TraitClass\ToolTrait;
@@ -28,9 +29,7 @@ class Socket extends TcpSocket
    */
   public function onConnect(Server $server, $client_id, $from_id)
   {
-    \Log::info('New TCP connection', [$client_id]);
-
-    $server->send($client_id, 'Welcome to Socket.');
+    Log::info('New TCP connection', [$client_id]);
   }
 
 
@@ -51,15 +50,14 @@ class Socket extends TcpSocket
    */
   public function onReceive(Server $server, $client_id, $from_id, $data)
   {
-    $data = ToolTrait::byte2string($data);
-\Log::error($data);
+    // Log::info('下游原始数据: ' . $data);
 
-exit;
-    $result = json_decode($data, true);
-\Log::error($result);
+    $result = ToolTrait::parseData($data);
+
+    // 如果数据不存在 type, 为无效数据
     if(empty($result['type']))
     {
-      $server->send($client_id, 'Socket: bye' . PHP_EOL);
+      Log::warning('Invalid TCP connection', [$client_id]);
 
       $server->close($client_id);
     }
@@ -67,42 +65,31 @@ exit;
     // 心跳包
     if(106 == $result['type'])
     {
+      // 获取打印机编号
       $printer_id = $result['terminalHeartbeat']['terminalId'];
+
+      // 获取客户端发送时间
       $client_time = $result['terminalHeartbeat']['terminalTime'];
 
+      // 计算当前时间与客户端发送时间的时间差, 客户端需要
       $timestamp = bcsub(time(), $client_time);
 
-      $message = 'heart beat delay:' . $timestamp . PHP_EOL;
+      // 拼装发送给下游的消息数据
+      $message = 'heart beat delay:' . $timestamp;
+
+      // 将字符串转换字节流字符串
+      $message = ToolTrait::stringToByte($message);
 
       $server->send($client_id, $message);
     }
+
 
     // 上报打印机状态
     if(103 == $result['type'])
     {
       event(new StatusEvent($result['printerMonitoring']));
     }
-
-
-    // $result = explode("0xff0x**", $data);
-
-    // foreach($result as $item)
-    // {
-    //   $server->send($client_id, $item);
-    // }
-
-
-
-    // if ($data === "quit0xff0x**")
-    // {
-    //   $server->send($client_id, 'LaravelS: bye' . PHP_EOL);
-    //   $server->close($client_id);
-    // }
   }
-
-
-
-
 
 
   /**
@@ -121,8 +108,6 @@ exit;
    */
   public function onClose(Server $server, $client_id, $from_id)
   {
-    \Log::info('Close TCP connection', [$client_id]);
-
-    $server->send($client_id, 'Goodbye');
+    Log::info('Close TCP connection', [$client_id]);
   }
 }
