@@ -135,10 +135,10 @@ trait ToolTrait
 
     for($i = 0; $i < strlen($data); $i++)
     {
-      $bytes[] = dechex(ord($data[$i]));
+      $bytes[] = sprintf('0x%X', dechex(ord($data[$i])));
     }
 
-    return json_encode($bytes);
+    return implode(' ', $bytes);
   }
 
 
