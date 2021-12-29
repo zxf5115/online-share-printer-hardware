@@ -135,7 +135,7 @@ trait ToolTrait
 
     for($i = 0; $i < strlen($data); $i++)
     {
-      $bytes[] = sprintf('0x%02X', dechex(ord($data[$i])));
+      $bytes[] = sprintf('0x%02X', ord($data[$i]));
     }
 
     return implode(' ', $bytes);
