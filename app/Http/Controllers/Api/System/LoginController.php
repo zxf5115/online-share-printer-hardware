@@ -79,7 +79,7 @@ class LoginController extends BaseController
         }
 
         $response = [
-          'fid' => $response->id,
+          'tid' => $response->id,
           'sign' => 'unkown'
         ];
 
