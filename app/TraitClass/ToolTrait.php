@@ -138,7 +138,7 @@ trait ToolTrait
       $bytes[] = dechex(ord($data[$i]));
     }
 
-    return implode(' ', $bytes);
+    return json_encode($bytes);
   }
 
 
