@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Api\System;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 use App\Http\Constant\Code;
 use App\Http\Controllers\Api\BaseController;
@@ -65,6 +66,8 @@ class LoginController extends BaseController
     {
       try
       {
+        Log::info($request->all());
+
         $condition = self::getSimpleWhereData($request->printerSn, 'code');
 
         $response = $this->_model::getRow($condition);
@@ -79,6 +82,8 @@ class LoginController extends BaseController
           'fid' => $response->id,
           'sign' => 'unkown'
         ];
+
+        Log::info($response);
 
         return self::success($response);
       }
