@@ -79,7 +79,8 @@ class LoginController extends BaseController
         }
 
         $response = [
-          'tid' => $response->id,
+          'tid' => strval($response->id),
+          'password' => '1'
           'sign' => 'unkown'
         ];
 
