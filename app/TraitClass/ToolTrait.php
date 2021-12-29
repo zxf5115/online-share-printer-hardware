@@ -128,10 +128,10 @@ trait ToolTrait
   {
     $total = strlen($data);
 
-    $bytes[0] = 0xff;
-    $bytes[1] = 0xfe;
-    $bytes[2] = dechex(bcdiv($total, 100));
-    $bytes[3] = dechex(bcmod($total, 100));
+    $bytes[0] = sprintf('0x%X', 0xff);
+    $bytes[1] = sprintf('0x%X', 0xfe);
+    $bytes[2] = sprintf('0x%X', dechex(bcdiv($total, 100)));
+    $bytes[3] = sprintf('0x%X', dechex(bcmod($total, 100)));
 
     for($i = 0; $i < strlen($data); $i++)
     {
