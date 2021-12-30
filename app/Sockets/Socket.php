@@ -82,7 +82,7 @@ class Socket extends TcpSocket
       // 将字符串添加前缀
       $message = ToolTrait::stringAddPrefix($message);
 
-      Log::info('heart beat data: ' . $message);
+      // Log::info('heart beat data: ' . $message);
 
       $server->send($client_id, $message);
     }
