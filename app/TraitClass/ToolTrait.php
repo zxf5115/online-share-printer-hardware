@@ -124,21 +124,11 @@ trait ToolTrait
    * @param [type] $data 字符串
    * @return [type]
    */
-  public static function stringToByte($data)
+  public static function stringAddPrefix($data)
   {
-    $total = strlen($data);
+    $prefix = chr(0xff) . chr(0xfe);
 
-    $bytes[0] = sprintf('0x%02X', 0xff);
-    $bytes[1] = sprintf('0x%02X', 0xfe);
-    $bytes[2] = sprintf('0x%02X', dechex(bcdiv($total, 100)));
-    $bytes[3] = sprintf('0x%02X', dechex(bcmod($total, 100)));
-
-    for($i = 0; $i < strlen($data); $i++)
-    {
-      $bytes[] = sprintf('0x%02X', ord($data[$i]));
-    }
-
-    return implode(' ', $bytes);
+    return $prefix . $data;
   }
 
 
