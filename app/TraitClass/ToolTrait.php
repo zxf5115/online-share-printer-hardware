@@ -126,15 +126,37 @@ trait ToolTrait
    */
   public static function stringAddPrefix($data)
   {
-    $prefix = chr(0xff) . chr(0xfe);
+    $total = strlen($data);
+
+    $start = chr(bcdiv($total, 100));
+
+    $end = chr(bcmod($total, 100));
+
+    $prefix = chr(0xff) . chr(0xfe) . $start . $end;
 
     return $prefix . $data;
   }
 
 
+  /**
+   * @author zhangxiaofei [<1326336909@qq.com>]
+   * @dateTime 2021-12-30
+   * ------------------------------------------
+   * 获取当前毫秒时间戳
+   * ------------------------------------------
+   *
+   * 获取当前毫秒时间戳
+   *
+   * @return [type]
+   */
+  public static function msectime()
+  {
+    list($msec, $sec) = explode(' ', microtime());
 
+    $msectime = (float)sprintf('%.0f', (floatval($msec) + floatval($sec)) * 1000);
 
-
+    return $msectime;
+  }
 
 
 

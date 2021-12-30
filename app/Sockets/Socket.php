@@ -74,7 +74,7 @@ class Socket extends TcpSocket
       $client_time = $result['terminalHeartbeat']['terminalTime'];
 
       // 计算当前时间与客户端发送时间的时间差, 客户端需要
-      $timestamp = bcsub(time(), $client_time);
+      $timestamp = bcsub(ToolTrait::msectime(), $client_time);
 
       // 拼装发送给下游的消息数据
       $message = 'heart beat delay:' . $timestamp;
