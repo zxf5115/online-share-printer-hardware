@@ -128,11 +128,11 @@ trait ToolTrait
   {
     $total = strlen($data);
 
-    $start = chr(bcdiv($total, 100));
+    $start = bcdiv($total, 100);
 
-    $end = chr(bcmod($total, 100));
+    $end = bcmod($total, 100);
 
-    $prefix = chr(0xff) . chr(0xfe) . $start . $end;
+    $prefix = chr(0xff) . chr(0xfe) . chr($start) . chr($end);
 
     return $prefix . $data;
   }

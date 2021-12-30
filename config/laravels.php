@@ -317,7 +317,7 @@ return [
         'http_compression'   => false,
 
         // 表示每10秒遍历一次，一个连接如果20秒内未向服务器发送任何数据，此连接将被强制关闭
-        'heartbeat_idle_time'      => 20,
-        'heartbeat_check_interval' => 10,
+        // 'heartbeat_idle_time'      => 20,
+        // 'heartbeat_check_interval' => 10,
     ],
 ];
