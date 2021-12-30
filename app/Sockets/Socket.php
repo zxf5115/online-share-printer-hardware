@@ -79,10 +79,10 @@ class Socket extends TcpSocket
       // 拼装发送给下游的消息数据
       $message = 'heart beat delay:' . $timestamp;
 
+      Log::info('heart beat data: ' . $message);
+
       // 将字符串添加前缀
       $message = ToolTrait::stringAddPrefix($message);
-
-      // Log::info('heart beat data: ' . $message);
 
       $server->send($client_id, $message);
     }
