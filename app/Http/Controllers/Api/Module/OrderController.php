@@ -101,6 +101,7 @@ class OrderController extends BaseController
     $messages = [
       'orderId.required' => '请您输入订单自增编号',
       'code.required' => '请您输入打印状态',
+    ];
 
     $rule = [
       'orderId' => 'required',
