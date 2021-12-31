@@ -204,7 +204,7 @@ return [
 
         // The list of cron job
         'jobs'            => [
-            \App\Crontab\Socket\PrintCrontab::class;
+            \App\Crontab\Socket\PrintCrontab::class
         ],
 
         // Max waiting time of reloading
