@@ -59,7 +59,7 @@ class OrderController extends BaseController
 
         $response = $model->url;
 
-        return self::success($response);
+        return $response;
       }
       catch(\Exception $e)
       {
