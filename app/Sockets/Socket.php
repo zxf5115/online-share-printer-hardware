@@ -115,6 +115,7 @@ class Socket extends TcpSocket
 
     $message = ToolTrait::stringAddPrefix($message);
     Log::info($message);
+    $server->send($client_id, $message);
   }
 
 
