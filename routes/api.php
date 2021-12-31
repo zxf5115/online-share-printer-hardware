@@ -20,6 +20,13 @@ $api->version('v1', [
 
     $api->group(['namespace' => 'Module'], function ($api) {
 
+      // 公共路由
+      $api->group(['namespace' => 'Common', 'prefix' => 'common'], function ($api) {
+        // 支付回调路由
+        $api->group(['prefix' => 'notify'], function ($api) {
+          $api->any('wechat', 'NotifyController@wechat');
+        });
+      });
 
       // 订单路由
       $api->group(['prefix'  => 'order'], function ($api) {

@@ -93,29 +93,6 @@ class Socket extends TcpSocket
     {
       event(new StatusEvent($result['printerMonitoring'], $client_id));
     }
-
-
-
-    // $message = [
-    //   'orderId' => "81",
-    //   'items' => [
-    //     [
-    //       'id' => "1",
-    //       'fileId' => "81",
-    //       'url' => 'https://printer.vstown.cc/api/order/task',
-    //       'pages' => "1-1",
-    //       'copies' => null
-    //     ]
-    //   ]
-    // ];
-
-
-    // $message = json_encode($message);
-
-
-    // $message = ToolTrait::stringAddPrefix($message);
-    // Log::info($message);
-    // $server->send($client_id, $message);
   }
 
 
