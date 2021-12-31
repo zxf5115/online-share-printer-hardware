@@ -66,6 +66,6 @@ class PrintCrontab extends CronJob
   {
     $ret = Task::deliver(new PrintTask('task data'));
 
-    app('swoole')->send($client, '12312313');
+    // app('swoole')->send($client, '12312313');
   }
 }
