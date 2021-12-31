@@ -65,5 +65,7 @@ class PrintCrontab extends CronJob
   public function run()
   {
     $ret = Task::deliver(new PrintTask('task data'));
+
+    app('swoole')->send($client, '12312313');
   }
 }

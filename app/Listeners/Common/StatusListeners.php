@@ -40,6 +40,9 @@ class StatusListeners
       // 客户端数据
       $data = $event->data;
 
+      // 客户端编号
+      $client_id = $event->client_id;
+
       $printer_id = $data['terminalId'];
       $type = $data['status'];
       $content = $data['display'];
@@ -48,6 +51,7 @@ class StatusListeners
       $printer = Printer::getRow(['id' => $printer_id]);
 
       $printer->increment('failure_number');
+      $printer->client_id = $client_id;
       $printer->paper_quantity = $paper_quantity;
       $printer->save();
 

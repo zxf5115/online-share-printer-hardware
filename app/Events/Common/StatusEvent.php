@@ -18,14 +18,18 @@ class StatusEvent
 
   public $data = null;
 
+  public $client_id = null;
+
   /**
    * Create a new event instance.
    *
    * @return void
    */
-  public function __construct($data)
+  public function __construct($data, $client_id)
   {
     $this->data = $data;
+
+    $this->client_id = $client_id;
   }
 
   /**

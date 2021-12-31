@@ -91,31 +91,31 @@ class Socket extends TcpSocket
     // 上报打印机状态
     if(103 == $result['type'])
     {
-      event(new StatusEvent($result['printerMonitoring']));
+      event(new StatusEvent($result['printerMonitoring'], $client_id));
     }
 
 
 
-    $message = [
-      'orderId' => "81",
-      'items' => [
-        [
-          'id' => "1",
-          'fileId' => "81",
-          'url' => 'https://printer.vstown.cc/api/order/task',
-          'pages' => "1-1",
-          'copies' => null
-        ]
-      ]
-    ];
+    // $message = [
+    //   'orderId' => "81",
+    //   'items' => [
+    //     [
+    //       'id' => "1",
+    //       'fileId' => "81",
+    //       'url' => 'https://printer.vstown.cc/api/order/task',
+    //       'pages' => "1-1",
+    //       'copies' => null
+    //     ]
+    //   ]
+    // ];
 
 
-    $message = json_encode($message);
+    // $message = json_encode($message);
 
 
-    $message = ToolTrait::stringAddPrefix($message);
-    Log::info($message);
-    $server->send($client_id, $message);
+    // $message = ToolTrait::stringAddPrefix($message);
+    // Log::info($message);
+    // $server->send($client_id, $message);
   }
 
 
