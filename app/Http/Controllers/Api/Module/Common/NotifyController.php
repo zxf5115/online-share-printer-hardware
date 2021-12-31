@@ -1,4 +1,4 @@
-z<?php
+<?php
 namespace App\Http\Controllers\Api\Module\Common;
 
 use Illuminate\Http\Request;
