@@ -134,7 +134,13 @@ class OrderController extends BaseController
         $model->remark       = $request->reason;
         $model->save();
 
-        return self::success($model);
+        $response = [
+          'code' => $request->code,
+          'message' => $request->reason,
+          'data' => $request->reason,
+        ];
+
+        return self::success($response);
       }
       catch(\Exception $e)
       {
