@@ -23,7 +23,7 @@ class OrderController extends BaseController
    * @apiDescription 处理指定订单的打印任务
    * @apiGroup 23. 订单模块
    *
-   * @apiParam {String} id 订单自增编号
+   * @apiParam {String} order_id 订单自增编号
    * @apiParam {String} start 开始打印页码
    * @apiParam {String} end 结束打印页码
    *
@@ -33,13 +33,13 @@ class OrderController extends BaseController
   public function task(Request $request)
   {
     $messages = [
-      'id.required' => '请您输入订单自增编号',
+      'order_id.required' => '请您输入订单自增编号',
       'start.required' => '请您输入开始打印页码',
       'end.required' => '请您输入结束打印页码',
     ];
 
     $rule = [
-      'id' => 'required',
+      'order_id' => 'required',
       'start' => 'required',
       'end' => 'required',
     ];
@@ -55,7 +55,7 @@ class OrderController extends BaseController
     {
       try
       {
-        $model = Resource::getRow(['order_id' => $request->id]);
+        $model = Resource::getRow(['order_id' => $request->order_id]);
 
         $response = $model->url;
 
@@ -117,7 +117,7 @@ class OrderController extends BaseController
     else
     {
       try
-      {
+      {\Log::error($request->orderId);
         $model = Order::getRow(['id' => $request->orderId]);
 
         if(0 == $request->code)
