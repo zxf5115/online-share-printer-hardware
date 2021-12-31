@@ -24,7 +24,7 @@ $api->version('v1', [
       // 订单路由
       $api->group(['prefix'  => 'order'], function ($api) {
         $api->get('task', 'ProblemController@task');
-        $api->get('result', 'ProblemController@result');
+        $api->post('result', 'ProblemController@result');
       });
     });
   });

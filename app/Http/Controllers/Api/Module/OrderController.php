@@ -36,6 +36,7 @@ class OrderController extends BaseController
       'id.required' => '请您输入订单自增编号',
       'start.required' => '请您输入开始打印页码',
       'end.required' => '请您输入结束打印页码',
+    ];
 
     $rule = [
       'id' => 'required',
