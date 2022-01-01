@@ -43,12 +43,26 @@ class StatusListeners
       // 客户端编号
       $client_id = $event->client_id;
 
+      $printer = Printer::getRow(['client_id' => $client_id]);
+
+      // 如果打印机存在当前识别码，取消以前的
+      if(!empty($printer->id))
+      {
+        $printer->client_id = 0;
+        $printer->save();
+      }
+
       $printer_id = $data['terminalId'];
       $type = $data['status'];
       $content = $data['display'];
       $paper_quantity = $data['totalEnginePageCount'];
 
       $printer = Printer::getRow(['id' => $printer_id]);
+
+      if(empty($printer->id))
+      {
+        return false;
+      }
 
       $printer->increment('failure_number');
       $printer->client_id = $client_id;

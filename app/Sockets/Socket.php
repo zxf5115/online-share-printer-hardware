@@ -7,6 +7,7 @@ use Hhxsv5\LaravelS\Swoole\Socket\TcpSocket;
 
 use App\TraitClass\ToolTrait;
 use App\Events\Common\StatusEvent;
+use App\Models\Common\Module\Printer;
 
 /**
  * WebSocket
@@ -112,6 +113,14 @@ class Socket extends TcpSocket
    */
   public function onClose(Server $server, $client_id, $from_id)
   {
+    $model = Printer::getRow(['client_id' => $client_id]);
+
+    if(!empty($model->id))
+    {
+      $model->client_id = 0;
+      $model->save();
+    }
+
     Log::info('Close TCP connection', [$client_id]);
   }
 }
