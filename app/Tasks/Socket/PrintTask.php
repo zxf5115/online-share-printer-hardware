@@ -70,7 +70,7 @@ class PrintTask extends Task
             'fileId' => strval($order_id),
             'url' => 'https://printer.vstown.cc/api/order/task',
             'pages' => "1-1",
-            'copies' => strval($model->print_total)
+            'copies' => $model->print_total
           ]
         ]
       ];
@@ -117,8 +117,10 @@ class PrintTask extends Task
 
         Log::error('Print Queue: Socket 错误 [' . swoole_last_error() . ']');
       }
-
-      Log::info('Print Queue: 发送完成');
+      else
+      {
+        Log::info('Print Queue: 发送完成');
+      }
     }
     catch(\Exception $e)
     {
