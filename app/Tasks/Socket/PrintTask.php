@@ -35,64 +35,100 @@ class PrintTask extends Task
    */
   public function handle()
   {
-    // 打印队列Socket消耗
-    $key = RedisKey::SOCKET_PRINT_QUEUE;
-
-    if(0 == Redis::llen($key)
+    try
     {
-      Log::info('Print Queue: 队列为空');
+      // 打印队列Socket消耗
+      $key = RedisKey::SOCKET_PRINT_QUEUE;
 
-      return false;
-    }
+      if(0 == Redis::llen($key))
+      {
+        Log::info('Print Queue: 队列为空');
 
-    // 取出打印队列第一个元素
-    $order_id = Redis::lpop($key);
+        return false;
+      }
 
-    $model = Order::getRow(['id' => $order_id]);
+      // 取出打印队列第一个元素
+      $order_id = Redis::lpop($key);
 
-    if(empty($model->id))
-    {
-      Log::error('Print Queue: 订单不存在');
+      $model = Order::getRow(['id' => $order_id]);
 
-      return false;
-    }
+      if(empty($model->id))
+      {
+        // 打印失败，将内容添加到打印头部，等待二次打印
+        Redis::lpush($key, $order_id);
 
-    $data = [
-      'orderId' => strval($order_id),
-      'items' => [
-        [
-          'id' => "1",
-          'fileId' => strval($order_id),
-          'url' => 'https://printer.vstown.cc/api/order/task',
-          'pages' => "1-1",
-          'copies' => strval($model->print_total)
+        Log::error('Print Queue: 订单不存在');
+
+        return false;
+      }
+
+      $data = [
+        'orderId' => strval($order_id),
+        'items' => [
+          [
+            'id' => "1",
+            'fileId' => strval($order_id),
+            'url' => 'https://printer.vstown.cc/api/order/task',
+            'pages' => "1-1",
+            'copies' => strval($model->print_total)
+          ]
         ]
-      ]
-    ];
+      ];
 
-    // 内容转换为json
-    $data = json_encode($data);
+      // 内容转换为json
+      $data = json_encode($data);
 
-    // 将内容添加包头信息
-    $message = ToolTrait::stringAddPrefix($data);
+      // 将内容添加包头信息
+      $message = ToolTrait::stringAddPrefix($data);
 
-    // 获取当前订单使用的打印机
-    $printer = Printer::getRow(['id' => $model->printer_id]);
+      // 获取当前订单使用的打印机
+      $printer = Printer::getRow(['id' => $model->printer_id]);
 
-    if(empty($printer->id))
-    {
-      Log::error('Print Queue: 打印机未找到');
+      if(empty($printer->id))
+      {
+        // 打印失败，将内容添加到打印头部，等待二次打印
+        Redis::lpush($key, $order_id);
 
-      return false;
+        Log::error('Print Queue: 打印机未找到');
+
+        return false;
+      }
+
+      // 获得打印机当前socket识别号
+      $client_id = $printer->client_id;
+
+      if(empty($client_id))
+      {
+        // 打印失败，将内容添加到打印头部，等待二次打印
+        Redis::lpush($key, $order_id);
+
+        Log::error('Print Queue: 打印机识别号未找到');
+
+        return false;
+      }
+
+      // 发送打印任务消息
+      app('swoole')->send($client_id, $message);
+
+      if(0 != swoole_last_error())
+      {
+        // 打印失败，将内容添加到打印头部，等待二次打印
+        Redis::lpush($key, $order_id);
+
+        Log::error('Print Queue: Socket 错误');
+      }
+
+      Log::info('Print Queue: 发送完成');
     }
+    catch(\Exception $e)
+    {
+      // 打印失败，将内容添加到打印头部，等待二次打印
+      Redis::lpush($key, $order_id);
 
-    // 获得打印机当前socket识别号
-    $client_id = $printer->client_id;
+      Log::error('Print Queue: 异常');
 
-    // 发送打印任务消息
-    app('swoole')->send($client_id, $message);
-
-    Log::info('Print Queue: 发送完成');
+      record($e);
+    }
   }
 
 
