@@ -2,6 +2,7 @@
 namespace App\Crontab\Socket;
 
 use Swoole\Coroutine;
+use Illuminate\Support\Facades\Log;
 use Hhxsv5\LaravelS\Swoole\Task\Task;
 use Hhxsv5\LaravelS\Swoole\Timer\CronJob;
 
@@ -64,8 +65,8 @@ class PrintCrontab extends CronJob
    */
   public function run()
   {
-    $ret = Task::deliver(new PrintTask('task data'));
+    $result = Task::deliver(new PrintTask());
 
-    // app('swoole')->send($client, '12312313');
+
   }
 }

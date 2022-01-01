@@ -1,19 +1,24 @@
 <?php
 namespace App\Tasks\Socket;
 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 use Hhxsv5\LaravelS\Swoole\Task\Task;
+
+use App\TraitClass\ToolTrait;
+use App\Http\Constant\RedisKey;
+use App\Models\Common\Module\Order;
+use App\Models\Common\Module\Printer;
+
 
 /**
  * 打印任务
  */
 class PrintTask extends Task
 {
-  private $data;
-  private $result;
-
-  public function __construct($data)
+  public function __construct()
   {
-    $this->data = $data;
+
   }
 
 
@@ -21,7 +26,7 @@ class PrintTask extends Task
    * @author zhangxiaofei [<1326336909@qq.com>]
    * @dateTime 2021-12-31
    * ------------------------------------------
-   * 函数功能简述
+   * 处理打印任务
    * ------------------------------------------
    *
    * 处理任务的逻辑，运行在Task进程中，不能投递任务
@@ -30,10 +35,64 @@ class PrintTask extends Task
    */
   public function handle()
   {
-    \Log::info(__CLASS__ . ':handle start', [$this->data]);
-    sleep(2);// 模拟一些慢速的事件处理
-    // 此处抛出的异常会被上层捕获并记录到Swoole日志，开发者需要手动try/catch
-    $this->result = 'the result of ' . $this->data;
+    // 打印队列Socket消耗
+    $key = RedisKey::SOCKET_PRINT_QUEUE;
+
+    if(0 == Redis::llen($key)
+    {
+      Log::info('Print Queue: 队列为空');
+
+      return false;
+    }
+
+    // 取出打印队列第一个元素
+    $order_id = Redis::lpop($key);
+
+    $model = Order::getRow(['id' => $order_id]);
+
+    if(empty($model->id))
+    {
+      Log::error('Print Queue: 订单不存在');
+
+      return false;
+    }
+
+    $data = [
+      'orderId' => strval($order_id),
+      'items' => [
+        [
+          'id' => "1",
+          'fileId' => strval($order_id),
+          'url' => 'https://printer.vstown.cc/api/order/task',
+          'pages' => "1-1",
+          'copies' => strval($model->print_total)
+        ]
+      ]
+    ];
+
+    // 内容转换为json
+    $data = json_encode($data);
+
+    // 将内容添加包头信息
+    $message = ToolTrait::stringAddPrefix($data);
+
+    // 获取当前订单使用的打印机
+    $printer = Printer::getRow(['id' => $model->printer_id]);
+
+    if(empty($printer->id))
+    {
+      Log::error('Print Queue: 打印机未找到');
+
+      return false;
+    }
+
+    // 获得打印机当前socket识别号
+    $client_id = $printer->client_id;
+
+    // 发送打印任务消息
+    app('swoole')->send($client_id, $message);
+
+    Log::info('Print Queue: 发送完成');
   }
 
 
