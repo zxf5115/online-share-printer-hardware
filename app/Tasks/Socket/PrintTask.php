@@ -115,7 +115,7 @@ class PrintTask extends Task
         // 打印失败，将内容添加到打印头部，等待二次打印
         Redis::lpush($key, $order_id);
 
-        Log::error('Print Queue: Socket 错误');
+        Log::error('Print Queue: Socket 错误 [' . swoole_last_error() . ']');
       }
 
       Log::info('Print Queue: 发送完成');
