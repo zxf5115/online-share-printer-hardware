@@ -120,7 +120,7 @@ class OrderController extends BaseController
     else
     {
       try
-      {\Log::error($request->orderId);
+      {
         $model = Order::getRow(['id' => $request->orderId]);
 
         if(0 == $request->code)

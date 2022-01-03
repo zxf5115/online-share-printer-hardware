@@ -116,6 +116,8 @@ class PrintTask extends Task
         Redis::lpush($key, $order_id);
 
         Log::error('Print Queue: Socket 错误 [' . swoole_last_error() . ']');
+
+        return false;
       }
       else
       {
