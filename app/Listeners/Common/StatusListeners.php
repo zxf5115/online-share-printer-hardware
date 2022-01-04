@@ -64,18 +64,25 @@ class StatusListeners
         return false;
       }
 
-      $printer->increment('failure_number');
+      if(0 != $type)
+      {
+        $printer->increment('failure_number');
+      }
+
       $printer->client_id = $client_id;
       $printer->paper_quantity = $paper_quantity;
       $printer->save();
 
-      $log = new Log();
+      if(0 != $type)
+      {
+        $log = new Log();
 
-      $log->printer_id = $printer_id;
-      $log->type = $type;
-      $log->content = $content;
-      $log->operator = '客户端上报';
-      $log->save();
+        $log->printer_id = $printer_id;
+        $log->type = $type;
+        $log->content = $content;
+        $log->operator = '客户端上报';
+        $log->save();
+      }
 
       DB::commit();
     }
