@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Http\Constant\Code;
 use App\Models\Common\Module\Order;
+use App\Models\Common\Module\Printer\Log;
 use App\Models\Common\Module\Order\Resource;
 use App\Http\Controllers\Api\BaseController;
 
@@ -157,6 +158,17 @@ class OrderController extends BaseController
           'message' => $request->reason,
           'data' => $request->reason,
         ];
+
+        if(0 != $request->code)
+        {
+          $log = new Log();
+
+          $log->printer_id = $model->printer_id;
+          $log->type = $request->code;
+          $log->content = $request->reason;
+          $log->operator = '打印机报送';
+          $log->save();
+        }
 
         return self::success($response);
       }
