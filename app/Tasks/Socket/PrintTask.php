@@ -86,12 +86,12 @@ class PrintTask extends Task
         $id = $key + 1;
 
         $items[$key]['id'] = strval($id);
-        $items[$key]['fileId'] = strval($resource->pdf_url);
+        $items[$key]['fileId'] = strval($order_id);
         $items[$key]['url'] = 'https://printer.vstown.cc/api/order/task';
         $items[$key]['pages'] = $page;
         $items[$key]['copies'] = $model->print_total;
       }
-Log::info($items);
+
       $data = [
         'orderId' => strval($order_id),
         'items' => $items

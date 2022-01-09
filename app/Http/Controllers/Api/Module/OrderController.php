@@ -55,13 +55,24 @@ class OrderController extends BaseController
     {
       try
       {
-        $response = config('app.print_url');
+        $base_url = config('app.print_url');
 
-        $url = $request->id;
+        $order_id = $request->id;
         $start = $request->start;
         $end = $request->end;
 
-        $response .= substr($url, 0, strrpos($url, '.')) . '_' . $start . '_'. $end .'.pdf';
+        $model = Resource::getRow(['order_id' => $order_id]);
+
+        if(empty($model->pdf_url))
+        {
+          Log::error('打印文件不存在');
+
+          return false;
+        }
+
+        $url = $model->pdf_url;
+
+        $response = $base_url . substr($url, 0, strrpos($url, '.')) . '_' . $start . '_'. $end .'.pdf';
 
 \Log::info($response);
         header('Content-Type:application/pdf');

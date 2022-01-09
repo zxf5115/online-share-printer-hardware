@@ -189,6 +189,8 @@ trait ToolTrait
 
       $end = bcadd($page, 10);
 
+      $end = $end > $page_total ? $page_total : $end;
+
       $response[] = "$start-$end";
     }
 
