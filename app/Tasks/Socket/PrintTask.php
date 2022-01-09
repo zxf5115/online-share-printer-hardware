@@ -9,6 +9,7 @@ use App\TraitClass\ToolTrait;
 use App\Http\Constant\RedisKey;
 use App\Models\Common\Module\Order;
 use App\Models\Common\Module\Printer;
+use App\Models\Common\Module\Order\Resource;
 
 
 /**
@@ -16,6 +17,8 @@ use App\Models\Common\Module\Printer;
  */
 class PrintTask extends Task
 {
+  use ToolTrait;
+
   public function __construct()
   {
 
@@ -62,17 +65,36 @@ class PrintTask extends Task
         return false;
       }
 
+      $page_total = $model->page_total;
+
+      $resource =Resource::getRow(['order_id' => $order_id]);
+
+      if(empty($resource->id))
+      {
+        // 打印失败，将内容添加到打印头部，等待二次打印
+        Redis::lpush($key, $order_id);
+
+        Log::error('Print Queue: 订单资源不存在');
+
+        return false;
+      }
+
+      $pages = self::getSeparateFileUrl($page_total);
+
+      foreach($pages as $key => $page)
+      {
+        $id = $key + 1;
+
+        $items[$key]['id'] = strval($id);
+        $items[$key]['fileId'] = strval($resource->pdf_url);
+        $items[$key]['url'] = 'https://printer.vstown.cc/api/order/task';
+        $items[$key]['pages'] = $page;
+        $items[$key]['copies'] = $model->print_total;
+      }
+Log::info($items);
       $data = [
         'orderId' => strval($order_id),
-        'items' => [
-          [
-            'id' => "1",
-            'fileId' => strval($order_id),
-            'url' => 'https://printer.vstown.cc/api/order/task',
-            'pages' => "1-1",
-            'copies' => $model->print_total
-          ]
-        ]
+        'items' => $items
       ];
 
       // 内容转换为json

@@ -56,6 +56,8 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
+    'print_url' => env('PRINT_URL', null),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

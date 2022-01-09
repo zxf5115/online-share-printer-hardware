@@ -55,10 +55,15 @@ class OrderController extends BaseController
     {
       try
       {
-        $model = Resource::getRow(['order_id' => $request->id]);
+        $response = config('app.print_url');
 
-        $response = $model->url;
+        $url = $request->id;
+        $start = $request->start;
+        $end = $request->end;
 
+        $response .= substr($url, 0, strrpos($url, '.')) . '_' . $start . '_'. $end .'.pdf';
+
+\Log::info($response);
         header('Content-Type:application/pdf');
 
         echo file_get_contents($response);

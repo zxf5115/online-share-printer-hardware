@@ -153,4 +153,45 @@ trait ToolTrait
 
     return $msectime;
   }
+
+
+  /**
+   * @author zhangxiaofei [<1326336909@qq.com>]
+   * @dateTime 2022-01-07
+   * ------------------------------------------
+   * 将大PDF文件分割成多个小PDF文件，返回文件地址
+   * ------------------------------------------
+   *
+   * 将大PDF文件分割成多个小PDF文件，返回文件地址
+   *
+   * @param [type] $page_total 文件页数
+   * @return [type]
+   */
+  public static function getSeparateFileUrl($page_total, $threshold = 10)
+  {
+    $response = [];
+
+    for($i = 1; $i < 20; $i++)
+    {
+      $total = bcdiv($page_total, $i);
+
+      if($threshold > $total)
+      {
+        break;
+      }
+    }
+
+    for($x = 0; $x < $i; $x++)
+    {
+      $page = bcmul($x, 10);
+
+      $start = bcadd($page, 1);
+
+      $end = bcadd($page, 10);
+
+      $response[] = "$start-$end";
+    }
+
+    return $response;
+  }
 }
