@@ -225,6 +225,16 @@ class BaseController extends Controller
             $condition[] = [$key, '>=', $start_time];
             $condition[] = [$key, '<=', $end_time];
           }
+          else if(!is_null(json_decode($param)))
+          {
+            $param = json_decode($param);
+
+            $start_time = strtotime($param[0]);
+            $end_time = strtotime($param[1]);
+
+            $condition[] = [$key, '>=', $start_time];
+            $condition[] = [$key, '<=', $end_time];
+          }
           else
           {
             $start_time = strtotime($param);
