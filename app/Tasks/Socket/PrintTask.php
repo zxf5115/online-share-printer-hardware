@@ -45,8 +45,6 @@ class PrintTask extends Task
 
       if(0 == Redis::llen($key))
       {
-        Log::info('Print Queue: 队列为空');
-
         return false;
       }
 
@@ -132,12 +130,16 @@ class PrintTask extends Task
       // 发送打印任务消息
       app('swoole')->send($client_id, $message);
 
-      if(0 != swoole_last_error())
+      $code = swoole_last_error();
+
+      if(0 != $code)
       {
         // 打印失败，将内容添加到打印头部，等待二次打印
         Redis::lpush($key, $order_id);
 
-        Log::error('Print Queue: Socket 错误 [' . swoole_last_error() . ']');
+        $errormsg = socket_strerror($code);
+
+        Log::error('Print Queue: Socket 错误 [' . $code . '|'. $errormsg .']');
 
         return false;
       }

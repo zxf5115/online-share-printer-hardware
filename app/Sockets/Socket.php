@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Log;
 use Hhxsv5\LaravelS\Swoole\Socket\TcpSocket;
 
 use App\TraitClass\ToolTrait;
+use App\Events\Common\CheckEvent;
 use App\Events\Common\StatusEvent;
 use App\Models\Common\Module\Printer;
 
@@ -70,6 +71,9 @@ class Socket extends TcpSocket
     {
       // 获取打印机编号
       $printer_id = $result['terminalHeartbeat']['terminalId'];
+
+      // 校验client_id 是否正确
+      event(new CheckEvent($printer_id, $client_id));
 
       // 获取客户端发送时间
       $client_time = $result['terminalHeartbeat']['terminalTime'];

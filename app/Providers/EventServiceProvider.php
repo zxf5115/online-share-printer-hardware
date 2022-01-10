@@ -22,6 +22,11 @@ class EventServiceProvider extends ServiceProvider
           'SocialiteProviders\Weixin\WeixinExtendSocialite@handle',
         ],
 
+        // 打印机校验
+        'App\Events\Common\CheckEvent' => [
+            'App\Listeners\Common\CheckListeners',
+        ],
+
         // 打印机状态
         'App\Events\Common\StatusEvent' => [
             'App\Listeners\Common\StatusListeners',
