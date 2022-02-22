@@ -397,6 +397,38 @@ class Base extends Model
   }
 
 
+  /**
+   * @author zhangxiaofei [<1326336909@qq.com>]
+   * @dateTime 2022-02-22
+   * ------------------------------------------
+   * 查询单个字段的值
+   * ------------------------------------------
+   *
+   * 根据查询单个字段的值
+   *
+   * @param array $condition [查询条件]
+   * @return [type]
+   */
+  public static function getValue($field, $condition)
+  {
+    try
+    {
+      $model = self::buildWhere($condition, false);
+
+      $model = self::getRelevance($model, false);
+
+      $response = $model->value($field);
+
+      return $response;
+    }
+    catch(\Exception $e)
+    {
+      // 记录异常信息
+      self::record($e);
+    }
+  }
+
+
 
   /**
    * @author zhangxiaofei [<1326336909@qq.com>]
