@@ -13,6 +13,7 @@ class BaseEnum
   const ENABLE  = 1;
   const DISABLE = 2;
   const DELETE  = -1;
+  const VANISH  = -2;
 
 
   // 状态封装
@@ -31,6 +32,11 @@ class BaseEnum
       'value' => self::DELETE,
       'text' => '删除'
     ],
+
+    self::VANISH => [
+      'value' => self::VANISH,
+      'text' => '消失'
+    ]
   ];
 
 
