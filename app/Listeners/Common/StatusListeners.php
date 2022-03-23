@@ -51,6 +51,8 @@ class StatusListeners
 
       $paper_quantity = $data['totalEnginePageCount'];
 
+      $ink_quantity = $data['inkKLeft'];
+
       $printer = Printer::getRow(['client_id' => $client_id]);
 
       // 如果打印机存在当前识别码，取消以前的
@@ -77,6 +79,7 @@ class StatusListeners
 
       $printer->client_id = $client_id;
       $printer->paper_quantity = $paper_quantity;
+      $printer->ink_quantity = $ink_quantity;
       $printer->save();
 
       if(0 != $type)
