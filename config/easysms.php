@@ -21,12 +21,12 @@ return [
     ],
 
     'huawei' => [
-      'endpoint' => 'https://rtcsms.cn-north-1.myhuaweicloud.com:10743', // APP接入地址
-      'app_key' => '6HeL78wCjkTOaJrJ5ZfIH6IQuE3u', // APP KEY
-      'app_secret' => 'se2ecR4NQloX6oz0k2ig5uxF2ZYU', // APP SECRET
+      'endpoint' => '', // APP接入地址
+      'app_key' => '', // APP KEY
+      'app_secret' => '', // APP SECRET
       'from' => [
-          'default' => '8820123129442', // 通知类型
-          'code' => '8820090807290', // 验证码类型
+          'default' => '', // 通知类型
+          'code' => '', // 验证码类型
       ],
       'callback' => '' // 短信状态回调地址
     ],
